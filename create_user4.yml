@@ -1,0 +1,26 @@
+---
+- name: create a playbook for users
+  hosts: all
+  become: true
+  vars_files:
+    - user_list.yml
+    - vault.yml
+  tasks:
+    - name: create a group
+      group:
+        name: "{{ item }}"
+        state: present
+      loop:
+          - devops
+          - opsmgr
+    - name: create a user for developer group
+      user:
+        name: "{{item.name}}"
+        groups: devops
+        append: true
+        password: " {{ dev_pass | password_hash ('sha512')}}"
+        state: present
+      loop: "{{ users }}"
+      when:
+        - item.job == 'developer'
+        -  inventory_hostname in groups ['dev'] or inventory_hostname in groups ['test']

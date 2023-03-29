@@ -1,0 +1,5 @@
+---
+# vars file for apache3
+packages:
+  - httpd
+  - firewalld

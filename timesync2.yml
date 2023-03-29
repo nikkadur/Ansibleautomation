@@ -1,0 +1,11 @@
+---
+- name: playbook for time sync
+  hosts: all
+  become: true
+  vars:
+    my_server:
+      - hostname: 172.31.44.20
+        iburst: yes
+  roles:
+      - /usr/share/ansible/roles/rhel-system-roles.timesync
+...

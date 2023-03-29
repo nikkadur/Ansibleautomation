@@ -1,0 +1,9 @@
+- name: Play book for timesync
+  hosts: all
+  become: true
+  vars:  
+   timesync_ntp_servers:
+     - hostname: 172.31.46.186
+       iburst: yes
+  roles:
+    - /usr/share/ansible/roles/rhel-system-roles.timesync 

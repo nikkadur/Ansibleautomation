@@ -1,0 +1,68 @@
+---
+- name: playbook for hardware report
+  become: true
+  hosts: all
+
+  vars:
+   - destination: "/root/hwreport.txt"
+
+  tasks:
+   - name: downloading url
+     get_url:
+      url:  
+      dest: "{{ destination }}"
+
+   - name: replacing hostname content
+     ansible.builtin.replace:
+      path: "{{ destination }}"
+      regexp: "hostname"
+      replace: "{{ ansible_hostname }}"
+
+   - name: replacing memory content
+     ansible.builtin.replace:
+      path: "{{ destination }}"
+      regexp: "memory"
+      replace: "{{ ansible_memtotal_mb }}"
+
+   - name: replace bios version
+     ansible.builtin.replace:
+      path: "{{ destination }}"
+      regexp: "bios_version"
+      replace: "{{ ansible_bios_version }}"
+
+   - name: replace sda size content
+     ansible.builtin.replace:
+      path: "{{ destination }}"
+      regexp: "sda_size"
+      replace: "{{ ansible_facts ['devices']['sda']['size'] }}"
+     register: sda_info
+     ignore_errors: yes
+
+   - name: replacing sda size with NONE
+     ansible.builtin.replace:
+      path: "{{ destination }}"
+      regexp: "sda_size"
+      replace: "NONE"
+     when: sda_info.failed == true
+
+   - name: replace sdb size content
+     ansible.builtin.replace:
+      path: "{{ destination }}"
+      regexp: "sdb_size"
+      replace: "{{ ansible_facts ['devices']['sda']['size'] }}"
+     register: sdb_info
+     ignore_errors: yes
+
+   - name: replacing sdb size with NONE
+     ansible.builtin.replace:
+       path: "{{ destination }}"
+       regexp: "sdb_size"
+       replace: "NONE"
+     when: sdb_info.failed == true
+...
+
+     
+
+ 
+
+

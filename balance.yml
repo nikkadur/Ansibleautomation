@@ -1,0 +1,12 @@
+---
+- name: run on all nodes
+  become: true
+  hosts: all
+  tasks: []
+- name: Playbook for webserver group
+  hosts: webservers
+  become: true
+  roles:
+      - phprole
+
+

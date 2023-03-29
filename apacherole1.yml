@@ -1,0 +1,11 @@
+---
+- name: playbook trial
+  hosts: prod
+  become: true
+  collections:
+    - ansible.posix
+    - community.general
+  roles:
+    - role: apache5
+  
+...

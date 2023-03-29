@@ -1,0 +1,34 @@
+---
+- name: playbook for lvm creation
+  hosts: all
+  become: true
+  tasks:
+   - name: create new partition
+     parted:
+       device: /dev/xvda
+       number: 1
+       state: present
+       part_end: 2GB
+     when: ansible_hostname == 'node1' or ansible_hostname == 'node2' or ansible_hostname == 'node3'
+   - name: create a volume group
+     lvg:
+      vg: research
+      pvs: /dev/xvda
+     when: ansible_hostname == 'node1' or ansible_hostname == 'node2' or ansible_hostname == 'node3'
+   - name: create a new partition
+     parted:
+       device: /dev/xvdb
+       number: 1
+       state: present
+       part_end: 1GB
+     when: ansible_hostname == 'node4'
+   - name: create a volume group
+     lvg:
+      vg: research
+      pvs: /dev/xvdb
+     when: ansible_hostname == 'node4'
+...
+
+
+
+

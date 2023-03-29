@@ -1,0 +1,27 @@
+---
+- name: playbook for packages.yml
+  hosts: all
+  become: true
+  vars:
+   packages:
+    - php
+    - mariadb
+  tasks:
+    - name: Install a list of packages with a list variable
+      ansible.builtin.yum:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages }}"
+      when: inventory_hostname in groups ['dev'] or inventory_hostname in groups ['test'] or inventory_hostname in groups ['prod']
+
+    - name: INstall the RPM development tool package group
+      ansible.builtin.yum:
+        name: "@RPM Development tools"
+        state: present
+      when: inventory_hostname in groups ['dev']
+    - name: Update all the packages
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+      when: inventory_hostname in groups ['dev']
+

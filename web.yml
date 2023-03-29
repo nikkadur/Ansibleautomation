@@ -1,0 +1,33 @@
+---
+- name: directory creation playboook
+  hosts: prod
+  become: true
+  tasks:
+  - name: create a group
+    group:
+      name: webdev
+  - name: Create a directory /webdev
+    file:
+      state: directory
+      path: /webdev
+      mode: 02775
+      group: webdev
+      owner: apache
+      setype: "httpd_sys_content_t"
+  - name: create a symbolic link
+    file:
+      src: /webdev
+      path: /var/www/html/myweb
+      state: link
+      mode: 02775
+      owner: apache
+      setype: "httpd_sys_content_t"
+  - name: modify the file
+    copy:
+      dest: /webdev/index.html
+      mode: 0640
+      content: "Deployment"
+      owner: apache
+      setype: "httpd_sys_content_t"
+
+

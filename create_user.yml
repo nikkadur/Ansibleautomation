@@ -1,0 +1,47 @@
+---
+- name: playbook to create users
+  hosts: all
+  become: true
+  vars_files:
+    - user_list.yml
+    - vault.yml
+  tasks:
+    - name: create the groups
+      group:
+       name: "{{ item }}"
+       state: present
+      loop:
+          - devops
+          - opsmgr
+    - name: create the user with developer job profile
+      user:
+       name: "{{ item.name }}"
+       groups: devops
+       append: true
+       password: "{{ dev_pass | password_hash('sha512')}}"
+       state: present
+      loop: "{{ users }}"
+      when:
+       - item.job == 'developer'
+       - inventory_hostname in groups ['dev'] or inventory_hostname in groups ['test']
+    - name: create the user with manager job profile
+      user:
+        name: "{{ item.name }}"
+        groups: opsmgr
+        append: true
+        password: "{{ mgr_pass | password_hash('sha512')}}"
+        state: present
+      loop: "{{ users }}"
+      when:
+        - item.job == 'manager'
+        - inventory_hostname in groups ['prod']
+
+
+...
+
+
+
+
+
+
+

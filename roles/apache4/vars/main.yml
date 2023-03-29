@@ -1,0 +1,8 @@
+---
+# vars file for apache4
+packages:
+ - httpd
+ - firewalld
+rules:
+ - http
+ - https

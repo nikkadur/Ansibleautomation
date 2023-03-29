@@ -1,0 +1,9 @@
+---
+# vars file for apache2
+packages:
+- httpd
+- firewalld
+
+rules:
+- http
+- https

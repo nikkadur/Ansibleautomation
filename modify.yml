@@ -1,0 +1,20 @@
+- name: playbook to modify the file
+  hosts: all
+  become: true
+  tasks:
+   - name: replace the content in dev group
+     ansible.builtin.copy:
+      content: "Development"
+      dest: /etc/issue
+     when: inventory_hostname in groups ['dev']
+   - name: replace the content in testgroup
+     ansible.builtin.copy:
+       content: "Test"
+       dest: /etc/issue
+     when: inventory_hostname in groups ['test']
+   - name: replace the content in prodgroup
+     ansible.builtin.copy:
+      content: "Production"
+      dest: /etc/issue
+     when: inventory_hostname in groups ['prod']
+    

@@ -1,0 +1,10 @@
+---
+- name: playbook for apache role
+  become: true
+  hosts: prod
+  collections:
+   - ansible.posix
+  roles:
+    - apache5
+...
+

@@ -1,0 +1,26 @@
+---
+# tasks file for apache4
+- name: install all the required packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+
+- name: start the services
+  service:
+    name: "{{ item }}"
+    state: started
+  loop: "{{ packages }}"
+- name:  enable the firewall
+  ansible.posix.firewalld:
+   service: "{{ item }}"
+   permanent: true
+   state: enabled
+  loop: "{{ rules }}"
+- name: template 
+  template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+
+
+

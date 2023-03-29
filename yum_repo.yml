@@ -1,0 +1,11 @@
+---
+- name: Remove repository from a specific repo file
+  hosts: all
+  become: true
+  tasks:
+   - name: Remove the repository  
+     ansible.builtin.yum_repository:
+       name: epel
+       file: external_repos
+       state: absent
+

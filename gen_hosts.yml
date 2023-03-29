@@ -1,0 +1,11 @@
+---
+- name: playboook for generate hosts
+  hosts: all
+  become: true
+  tasks:
+    - name: use template to create /etc/myhostsfile
+      template:
+        src: h.j2
+        dest: /etc/myhosts
+      when: inventory_hostname in groups ['dev']
+...

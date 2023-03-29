@@ -1,0 +1,29 @@
+---
+# tasks file for apache2
+- name: Install the packages on all system
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+
+- name: start the services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop: "{{ packages }}"
+
+- name : enable the firewalld 
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+  loop: "{{ rules }}"
+
+- name: create the info file from template
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+
+
+    

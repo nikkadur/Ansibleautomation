@@ -1,0 +1,36 @@
+---
+- name: playbook for storage.yml
+  hosts: all
+  become: true
+  tasks:
+    - block:
+        - name: Create a logical Volume of 1500M
+          community.general.lvol:
+            vg: research
+            size: data
+            lvol: 1500m
+          register: lv_info
+      rescue:
+        - debug:
+            var: lv_info
+        - debug:
+            msg: VG not found
+          when: '"does not exist" in lv_info.msg'
+        - debug:
+            msg: LV cannot be created
+          when: '"insufficient freespace" in lv_info.error'
+        - name: Create a logical volume of 800M
+          community.general.lvol:
+            vg: research
+            lvol: data
+            size: 800m
+          register: lv_info_new
+          when: '"insufficient free space" in lv_info.err'
+        - debug: 
+           var: lv_info_new
+      always:
+        - name: create a file system
+          community.general.filesystem:
+            fstype: ext4
+            dev: /dev/research/data
+

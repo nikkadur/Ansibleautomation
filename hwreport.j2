@@ -1,0 +1,6 @@
+--Inventory host name:{{ ansible_facts['fqdn'] }}
+--Total memory in MB: {{ ansible_facts['memtotal_mb'] }}
+--BIOS version: {{ ansible_facts['bios_version'] }}
+--Size of disk vda: {{ ansible_facts ['devices']['vda']['size'] }}
+--Size of disk vdb: {{ ansible_facts['devices']['vdb']['size'] }}
+

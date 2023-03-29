@@ -1,0 +1,28 @@
+---
+- name: packages for all the ansible nodes
+  become: true
+  hosts: all
+  vars:
+    packages:
+      - git
+      - net-tools-2.0-0.62.20160912git.el9.x86_64 
+  tasks:
+    - name: install all the required packages
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages }}"
+      when: inventory_hostname in groups ['dev'] or inventory_hostname in groups ['test']
+
+    - name: install the RPM package in test group
+      yum:
+        name: "@RPM Development Tools"
+        state: present
+      when: inventory_hostname in groups ['test']
+
+    - name: update all the packages in prod group
+      yum:
+        name: '*'
+        state: latest
+      when: inventory_hostname in groups ['dev']
+

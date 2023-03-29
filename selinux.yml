@@ -1,0 +1,11 @@
+---
+- name: playbook for selinux
+  become: true
+  hosts: all
+  vars:
+    parameter:
+      - policy: targeted
+        state: enforcing
+    roles:
+     - /usr/share/ansible/roles/linux-system-roles.selinux
+

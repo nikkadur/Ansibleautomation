@@ -1,0 +1,20 @@
+---
+- name: playbook for packages.yml
+  hosts: all
+  become: true
+  vars:
+    packages:
+      - git
+      - httpd
+  tasks:
+      - name: Install a list of packages with a list variable
+        ansible.builtin.yum:
+          name: "{{ item }}"
+          state: present
+        loop: "{{ packages }}"
+        when: inventory_hostname in groups ['dev'] or inventory_hostname in groups ['prod']
+...
+
+
+
+

@@ -1,0 +1,13 @@
+---
+- name: playbook to create a cronjob
+  hosts: all
+  become: true
+  tasks:
+    -  ansible.builtin.cron:
+         name: "check dirs"
+         minute: "2"
+         job: 'logger "EX294 in progress" '
+         user: natasha
+
+
+

@@ -1,0 +1,8 @@
+---
+# tasks file for apache3
+- name: install the packages on the machine
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+  
